@@ -1,0 +1,1 @@
+<img src="for-readme/modal-window.gif" align="center"></div>
