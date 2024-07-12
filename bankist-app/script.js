@@ -61,8 +61,9 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
 
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
+  const movs = sort ? movements.slice().sort(a, b => a - b) : movements;
   movements.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
@@ -168,6 +169,33 @@ const updateUI = function (acc) {
   calcDisplayBalance(acc);
   calcDisplaySummary(acc);
 };
+
+/////////////////////////////////////////////////
+
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  if (
+    inputCloseUsername === currentAccount.username &&
+    inputClosePin === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    accounts.splice(index, 1);
+    containerApp.style.opacity = 100;
+    inputClosePin.value = inputCloseUsername = '';
+  }
+});
+
+/////////////////////////////////////////////////
+
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  sorted = !sorted;
+  displayMovements(currentAccount.movements, sorted);
+});
 
 /////////////////////////////////////////////////
 
