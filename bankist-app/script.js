@@ -72,7 +72,7 @@ const displayMovements = function (movements, sort = false) {
       i + 1
     } ${type}</div>
       <div class="movements__date">3 days ago</div>
-      <div class="movements__value">${mov} €</div>
+      <div class="movements__value">${mov.toFixed(2)} €</div>
     </div>`;
 
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -84,7 +84,7 @@ displayMovements(account1.movements);
 
 const calcDisplayBalance = function (account) {
   acc.balance = account.movs.reduce(acc, mov => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance} €`;
+  labelBalance.textContent = `${acc.balance.toFixed(2)} €`;
 };
 calcDisplayBalance(account1.movements);
 
@@ -94,19 +94,19 @@ const calcDisplaySummary = function (acc) {
   const incoming = acc.movements
     .filter(mov => mov > 0)
     .reduce(acc, mov => acc + mov, 0);
-  labelSumIn.textContent = `${incoming} €`;
+  labelSumIn.textContent = `${incoming.toFixed(2)} €`;
 
   const outgoing = acc.movements
     .filter(mov => mov < 0)
     .reduce(acc, mov => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(outgoing)} €`;
+  labelSumOut.textContent = `${Math.abs(outgoing).toFixed(2)} €`;
 
   const interest = acc.movements
     .filter(mov => mov > 0)
     .map(deposit => (deposit * acc.interestRate) / 100)
     .filter(int => int >= 1)
     .reduce(acc, mov => acc + mov, 0);
-  labelSumInterest.textContent = `${interest} €`;
+  labelSumInterest.textContent = `${interest.toFixed(2)} €`;
 };
 
 calcDisplaySummary(account1.movements);
@@ -132,7 +132,7 @@ let currentAccount;
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
   currentAccount = accounts.find(acc => acc.username === inputLoginUsername);
-  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+  if (currentAccount?.pin === +inputLoginPin.value) {
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
     }`;
@@ -147,7 +147,7 @@ btnLogin.addEventListener('click', function (e) {
 
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
-  const amount = Number(inputTransferAmount.value);
+  const amount = +inputTransferAmount.value;
   const receiverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
   );
